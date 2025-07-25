@@ -1,0 +1,46 @@
+name: run tests with reports
+
+on:
+  push: 
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: instal dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: run tests and generate reports
+      run: |
+        pytest --junitxml=reports.xml --cov=calculator --cov-report=html --html=report.html
+
+    - name: upload junit test report
+      uses: actions/upload-artifact@v4
+      with:
+        name: junit-report
+        path: reports.xml
+
+    - name: upload coverage html report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: htmlcov/
+
+    - name: upload html test report
+      uses: actions/upload-artifact@v4
+      with:
+        name: html-test-report
+        path: report.html

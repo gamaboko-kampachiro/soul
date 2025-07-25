@@ -7,7 +7,7 @@ pipeline {
         stage('setup environment') {
             steps {
                 echo "installing dependencies"
-                sh'''
+                bat'''
                     pip install --upgrade pip
                     pip install pytest pytest-cov pytest-html
                 '''
@@ -17,7 +17,7 @@ pipeline {
         stage('Run tests') {
             steps{
                 echo "running tests and generating reporst"
-                sh '''
+                bat '''
                     pytest --junitxml=report.xml --cov=calculator --cov-report=html --html=report.html
                     '''
             }
